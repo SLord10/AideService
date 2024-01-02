@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aide-deployment
+  labels:
+    app: aide
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: aide
+  template:
+    metadata:
+      name: aide
+      labels:
+        app: aide
+    spec:
+      containers:
+        - name: aide-container
+          image: slord11/aide
+          ports:
+            - containerPort: 8084
+          imagePullPolicy: IfNotPresent
+      restartPolicy: Always
+
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: aide-service
+spec:
+  selector:
+    app: aide
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8084
